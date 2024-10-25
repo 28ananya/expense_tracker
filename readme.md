@@ -75,5 +75,7 @@ Add Expense
 6. URL: GET /balance/balance_sheet/download
         Authorization: Bearer token required
 
+## Installation of pytest
+        pip install pytest
 ## Unit and Integrated testing
       pytest --disable-warnings
