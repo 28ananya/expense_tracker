@@ -2,11 +2,24 @@ from app.utils.auth import generate_access_token  # Import the correct function
 from app import db
 from app.models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from flask import jsonify
 from app.models import User
 from sqlalchemy.exc import IntegrityError
-
+import re
 class UserService:
+    @staticmethod
+    def validate_user_data(data):
+        email_pattern = r"[^@]+@[^@]+\.[^@]+"  # Basic email regex pattern
+        mobile_pattern = r"^[0-9]{10}$"        # Basic 10-digit number pattern
+
+        # Check if fields are present
+        if not data.get("email") or not re.match(email_pattern, data["email"]):
+            return jsonify({"error": "Invalid email format"}), 400
+        if not data.get("name") or len(data["name"]) < 2:
+            return jsonify({"error": "Name must be at least 2 characters long"}), 400
+        if not data.get("mobile") or not re.match(mobile_pattern, data["mobile"]):
+            return jsonify({"error": "Invalid mobile number format"}), 400
+        return None
     @staticmethod
     def register_user(data):
         # Check if user already exists
